@@ -52,6 +52,30 @@
       });
     };
 
+    // Frotas da Santa Ana
+    const frotasSantaAna = [
+      '02-722','02-723','02-727','02-728','02-732','02-733',
+      '02-741','02-743','02-737','02-740','02-739','02-747',
+      '02-746','02-076','02-748','02-749','02-750','02-751',
+      '02-752','02-014'
+    ];
+
+    // Grava automaticamente no localStorage
+    const seedSantaAnaFrotas = () => {
+      const frotas = db.get();
+      frotasSantaAna.forEach(codigo => {
+        if (!frotas.includes(codigo)) frotas.push(codigo);
+      });
+      db.set(frotas);
+
+      // também adiciona a fazenda Santa Ana (se existir a lista de fazendas)
+      const fazendas = JSON.parse(localStorage.getItem('fazendas') || '[]');
+      if (!fazendas.includes('SANTA ANA')) {
+        fazendas.push('SANTA ANA');
+        localStorage.setItem('fazendas', JSON.stringify(fazendas));
+      }
+    };
+
     $('btn-add').onclick = () => {
       const codigo = $('codigo').value.trim();
       if (!codigo) return alert('Digite o código da frota.');
@@ -73,6 +97,8 @@
       }
     };
 
+    // Executa ao carregar
+    seedSantaAnaFrotas();
     render();
   </script>
 </body>
