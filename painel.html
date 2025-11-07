@@ -20,22 +20,13 @@
     .btn-logout { background: #dc2626; color: white; border: none; padding: 0.5rem 1rem; border-radius: 999px; font-size: 0.8rem; cursor: pointer; }
     .btn-logout:hover { background: #b91c1c; }
 
-    /* SELECT COM ROLAGEM */
     #fazenda-select {
-      max-height: 200px;
-      overflow-y: auto;
-      padding: 0.4rem;
-      border-radius: 0.5rem;
-      border: 1px solid #fff;
-      background: #1e40af;
-      color: white;
-      font-size: 0.9rem;
-      width: 180px;
+      max-height: 200px; overflow-y: auto; padding: 0.4rem; border-radius: 0.5rem; border: 1px solid #fff;
+      background: #1e40af; color: white; font-size: 0.9rem; width: 180px;
     }
     #fazenda-select::-webkit-scrollbar { width: 8px; }
     #fazenda-select::-webkit-scrollbar-track { background: #1e3a8a; border-radius: 4px; }
     #fazenda-select::-webkit-scrollbar-thumb { background: #60a5fa; border-radius: 4px; }
-    #fazenda-select::-webkit-scrollbar-thumb:hover { background: #3b82f6; }
 
     .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.75rem; margin-bottom: 1.5rem; box-shadow: var(--shadow); }
     .grid { display: grid; gap: 1rem; }
@@ -47,9 +38,87 @@
     .multi { color: var(--muted); font-weight: 500; font-size: 0.8rem; }
     select, input { width: 100%; padding: 0.75rem; border: 1.5px solid var(--border); border-radius: var(--radius); background: #fff; font: inherit; transition: var(--transition); }
     select:focus, input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.15); }
-    .choices__inner { border: 1.5px solid var(--border) !important; border-radius: var(--radius) !important; min-height: 44px !important; padding: 0.375rem 0.5rem !important; }
-    .choices.is-focused .choices__inner { border-color: var(--primary) !important; box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.15) !important; }
-    .choices__list--multiple .choices__item { background: var(--success); border-color: var(--success); color: white; font-weight: 600; border-radius: 999px; font-size: 0.8rem; }
+
+    /* ===== DIAS DA SEMANA (JÁ BONITO) ===== */
+    .choices[data-type*="dias"] .choices__inner {
+      min-height: 50px !important;
+      padding: 0.4rem 0.6rem !important;
+    }
+
+    /* ===== OPERADOR: MESMO ESTILO DOS DIAS ===== */
+    .choices[data-type*="operador"] .choices__inner {
+      min-height: 50px !important;
+      padding: 0.4rem 0.6rem !important;
+      border-radius: var(--radius) !important;
+      border: 1.5px solid var(--border) !important;
+      background: white !important;
+      font-size: 0.9rem !important;
+    }
+    .choices[data-type*="operador"].is-focused .choices__inner {
+      border-color: var(--primary) !important;
+      box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.15) !important;
+    }
+
+    /* TAGS IGUAIS À SEMANA */
+    .choices[data-type*="operador"] .choices__list--multiple .choices__item,
+    .choices[data-type*="dias"] .choices__list--multiple .choices__item {
+      background: var(--success) !important;
+      color: white !important;
+      border-radius: 999px !important;
+      font-size: 0.82rem !important;
+      font-weight: 600 !important;
+      padding: 0.35rem 0.75rem !important;
+      margin: 0.2rem !important;
+      white-space: nowrap !important;
+      max-width: 150px !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 0.4rem !important;
+      height: 32px !important;
+      line-height: 1.4 !important;
+    }
+
+    /* BOTÃO X VISÍVEL */
+    .choices__list--multiple .choices__item .choices__button {
+      display: inline-block !important;
+      width: 16px !important;
+      height: 16px !important;
+      margin-left: 6px !important;
+      background: rgba(255,255,255,0.3) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='white'%3E%3Cpath fill-rule='evenodd' d='M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z' clip-rule='evenodd'/%3E%3C/svg%3E") center/10px no-repeat !important;
+      border: none !important;
+      border-radius: 50% !important;
+      opacity: 0.85 !important;
+      transition: all 0.2s ease !important;
+      cursor: pointer !important;
+    }
+    .choices__list--multiple .choices__item .choices__button:hover {
+      background-color: rgba(255,255,255,0.5) !important;
+      opacity: 1 !important;
+    }
+
+    /* DROPDOWN DOS OPERADORES */
+    .choices[data-type*="operador"] .choices__list--dropdown {
+      max-height: 300px !important;
+      overflow-y: auto !important;
+      border-radius: var(--radius) !important;
+      box-shadow: var(--shadow-lg) !important;
+      margin-top: 4px !important;
+      z-index: 1000;
+    }
+    .choices[data-type*="operador"] .choices__list--dropdown .choices__item {
+      padding: 0.75rem 1rem !important;
+      font-size: 0.9rem !important;
+      white-space: normal !important;
+      word-break: break-word !important;
+      line-height: 1.4 !important;
+    }
+    .choices[data-type*="operador"] .choices__list--dropdown .choices__item--selectable.is-highlighted {
+      background: var(--primary-light) !important;
+      color: var(--primary) !important;
+    }
+
     .btn { padding: 0.75rem 1.5rem; border: none; border-radius: 999px; font-weight: 700; font-size: 0.95rem; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; transition: var(--transition); box-shadow: var(--shadow-sm); text-transform: uppercase; letter-spacing: 0.5px; }
     .btn-primary { background: var(--success); color: white; }
     .btn-primary:hover { background: #15803d; transform: translateY(-1px); box-shadow: var(--shadow); }
@@ -57,6 +126,7 @@
     .btn-secondary:hover { background: #cbd5e1; }
     .bar { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1.5rem; justify-content: center; align-items: center; }
     .pill { background: var(--success-light); color: #166534; padding: 0.5rem 1rem; border-radius: 999px; font-weight: 600; font-size: 0.8rem; box-shadow: var(--shadow-sm); }
+
     .table-wrapper { overflow-x: auto; border-radius: var(--radius-lg); box-shadow: var(--shadow); margin-top: 1rem; }
     table { width: 100%; min-width: 1100px; border-collapse: collapse; background: white; }
     thead th { background: var(--primary); color: white; font-weight: 700; padding: 0.875rem 0.75rem; text-align: center; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; }
@@ -67,9 +137,8 @@
     .operator { text-align: left !important; font-weight: 600; color: var(--text); }
     .empty { padding: 3rem; text-align: center; color: var(--muted); font-style: italic; }
 
-    /* RANKING ESTILIZADO */
     .ranking { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; margin-top: 1.5rem; }
-    .rank-card { background: white; border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.25rem; box-shadow: var(--shadow); text-align: left; position: relative; overflow: hidden; }
+    .rank-card { background: white; border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.25rem; box-shadow: var(--shadow); }
     .rank-title { font-weight: 700; color: var(--primary); margin-bottom: 1rem; font-size: 0.95rem; text-transform: uppercase; text-align: center; }
     .rank-list { display: flex; flex-direction: column; gap: 0.75rem; }
     .rank-item { display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0.75rem; background: #f8fafc; border-radius: var(--radius); border-left: 4px solid transparent; transition: all 0.2s ease; }
@@ -78,7 +147,7 @@
     .rank-pos.gold { color: #fbbf24; }
     .rank-pos.silver { color: #94a3b8; }
     .rank-pos.bronze { color: #d97706; }
-    .rank-name { flex: 1; font-weight: 600; color: var(--text); font-size: 0.95rem; }
+    .rank-name { flex: 1; font-weight: 600; color: var(--text); font-size: 0.95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .rank-value { font-weight: 700; color: var(--success); font-size: 0.9rem; }
 
     .toast { position: fixed; bottom: 2rem; right: 2rem; background: var(--success); color: white; padding: 1rem 1.5rem; border-radius: 999px; box-shadow: var(--shadow-lg); display: flex; align-items: center; gap: 0.75rem; transform: translateX(120%); opacity: 0; transition: all 0.4s ease; z-index: 1000; font-weight: 600; }
@@ -93,7 +162,7 @@
         <div class="week">Semana: <span id="semana-label"></span></div>
       </div>
       <div class="header-info">
-        Gerente: <strong id="gerente-nome"></strong><br>
+        Gerente: <strong id="gerente-nome">ADMIN</strong><br>
         Fazenda: 
         <select id="fazenda-select" size="1"></select>
         <button class="btn-logout" id="btn-logout">Sair</button>
@@ -106,50 +175,38 @@
           <label>Frota</label>
           <select id="frota"></select>
         </div>
-
         <div>
           <label>Operador <span class="multi">(multi)</span></label>
           <select id="operador" multiple></select>
         </div>
-
         <div>
           <label>Operações</label>
           <select id="operacao">
-            <option>Inseticida</option>
-            <option>Florada</option>
-            <option>Adubação/Calagem/Esterco</option>
-            <option>Pinta Preta</option>
-            <option>Roçadeira/Trincha</option>
-            <option>Leprose</option>
-            <option>Mosca</option>
-            <option>Herbicida</option>
-            <option>Poda</option>
-            <option>Diversos</option>
-            <option>Drench</option>
+            <option>Inseticida</option><option>Florada</option><option>Adubação/Calagem/Esterco</option>
+            <option>Pinta Preta</option><option>Roçadeira/Trincha</option><option>Leprose</option>
+            <option>Mosca</option><option>Herbicida</option><option>Poda</option>
+            <option>Diversos</option><option>Drench</option>
           </select>
         </div>
-
         <div>
           <label>Turno</label>
-          <select id="turno">
-            <option>Dia</option>
-            <option>Noite</option>
-          </select>
+          <select id="turno"><option>Dia</option><option>Noite</option></select>
         </div>
-
         <div>
           <label>Unidade</label>
-          <select id="unidade">
-            <option>BB</option>
-            <option>Há</option>
-            <option>KG</option>
-          </select>
+          <select id="unidade"><option>BB</option><option>Há</option><option>KG</option></select>
         </div>
       </div>
     </section>
 
     <div class="grid g-3" style="margin-top:1.5rem">
-      <div><label>Dia da Semana <span class="multi">(multi)</span></label><select id="dias" multiple><option value="seg">Segunda</option><option value="ter">Terça</option><option value="qua">Quarta</option><option value="qui">Quinta</option><option value="sex">Sexta</option><option value="sab">Sábado</option><option value="dom">Domingo</option></select></div>
+      <div><label>Dia da Semana <span class="multi">(multi)</span></label>
+        <select id="dias" multiple>
+          <option value="seg">Segunda</option><option value="ter">Terça</option><option value="qua">Quarta</option>
+          <option value="qui">Quinta</option><option value="sex">Sexta</option><option value="sab">Sábado</option>
+          <option value="dom">Domingo</option>
+        </select>
+      </div>
       <div><label>Rend. Programado</label><input id="prog" type="number" step="0.1" placeholder="0.0"></div>
       <div><label>Rend. Real</label><input id="real" type="number" step="0.1" placeholder="0.0"></div>
     </div>
@@ -187,42 +244,17 @@
         <div class="rank-card">
           <div class="rank-title">MAIS BOMBAS (R)</div>
           <div class="rank-list">
-            <div class="rank-item">
-              <span class="rank-pos gold">1º</span>
-              <span class="rank-name" id="rank-bb-name-1">—</span>
-              <span class="rank-value" id="rank-bb-val-1">— BB</span>
-            </div>
-            <div class="rank-item">
-              <span class="rank-pos silver">2º</span>
-              <span class="rank-name" id="rank-bb-name-2">—</span>
-              <span class="rank-value" id="rank-bb-val-2">— BB</span>
-            </div>
-            <div class="rank-item">
-              <span class="rank-pos bronze">3º</span>
-              <span class="rank-name" id="rank-bb-name-3">—</span>
-              <span class="rank-value" id="rank-bb-val-3">— BB</span>
-            </div>
+            <div class="rank-item"><span class="rank-pos gold">1º</span><span class="rank-name" id="rank-bb-name-1">—</span><span class="rank-value" id="rank-bb-val-1">— BB</span></div>
+            <div class="rank-item"><span class="rank-pos silver">2º</span><span class="rank-name" id="rank-bb-name-2">—</span><span class="rank-value" id="rank-bb-val-2">— BB</span></div>
+            <div class="rank-item"><span class="rank-pos bronze">3º</span><span class="rank-name" id="rank-bb-name-3">—</span><span class="rank-value" id="rank-bb-val-3">— BB</span></div>
           </div>
         </div>
-
         <div class="rank-card">
           <div class="rank-title">MAIS HECTARES (R)</div>
           <div class="rank-list">
-            <div class="rank-item">
-              <span class="rank-pos gold">1º</span>
-              <span class="rank-name" id="rank-ha-name-1">—</span>
-              <span class="rank-value" id="rank-ha-val-1">— Há</span>
-            </div>
-            <div class="rank-item">
-              <span class="rank-pos silver">2º</span>
-              <span class="rank-name" id="rank-ha-name-2">—</span>
-              <span class="rank-value" id="rank-ha-val-2">— Há</span>
-            </div>
-            <div class="rank-item">
-              <span class="rank-pos bronze">3º</span>
-              <span class="rank-name" id="rank-ha-name-3">—</span>
-              <span class="rank-value" id="rank-ha-val-3">— Há</span>
-            </div>
+            <div class="rank-item"><span class="rank-pos gold">1º</span><span class="rank-name" id="rank-ha-name-1">—</span><span class="rank-value" id="rank-ha-val-1">— Há</span></div>
+            <div class="rank-item"><span class="rank-pos silver">2º</span><span class="rank-name" id="rank-ha-name-2">—</span><span class="rank-value" id="rank-ha-val-2">— Há</span></div>
+            <div class="rank-item"><span class="rank-pos bronze">3º</span><span class="rank-name" id="rank-ha-name-3">—</span><span class="rank-value" id="rank-ha-val-3">— Há</span></div>
           </div>
         </div>
       </div>
@@ -240,73 +272,56 @@
       setTimeout(() => $('toast').classList.remove('show'), time);
     };
 
-    // ================== LOGIN / PERMISSÕES ==================
-    const usuario = localStorage.getItem('usuario_logado');
-    const fazendasLiberadas = JSON.parse(localStorage.getItem('fazendas_liberadas') || '[]');
-    const isAdmin = localStorage.getItem('is_admin') === 'true';
-
-    if (!usuario) window.location.href = 'login.html';
+    const usuario = localStorage.getItem('usuario_logado') || 'ADMIN';
+    localStorage.setItem('usuario_logado', usuario);
     $('gerente-nome').textContent = usuario.toUpperCase();
 
+    let fazendaAtual = localStorage.getItem('fazenda_atual') || "SANTA ANA";
+
+    const todasFazendas = ["SLP","IGARATA","FUNIL","SANTA ANA","BOA ESPERANÇA","SANTA CLARA","SANTA MARIA","RUBIÃO","PAINEIRAS","MONJOLINHO","CAMBARA"];
     const fazendaSelect = $('fazenda-select');
-    let fazendaAtual = localStorage.getItem('fazenda_atual') || "";
-
-    // ---------- lista global de fazendas ----------
-    let todasFazendas = JSON.parse(localStorage.getItem('fazendas') || '[]');
-
-    // cria lista padrão se estiver vazia
-    if (!todasFazendas.length) {
-      todasFazendas = [
-        "SLP",
-        "IGARATA",
-        "FUNIL",
-        "SANTA ANA",
-        "BOA ESPERANÇA",
-        "SANTA CLARA",
-        "SANTA MARIA",
-        "RUBIÃO",
-        "PAINEIRAS",
-        "MONJOLINHO",
-        "CAMBARA"
-      ];
-      localStorage.setItem('fazendas', JSON.stringify(todasFazendas));
-    }
-
-    // se admin vê todas; se não, vê só fazendas_liberadas
-    let fazendasDisponiveis = isAdmin ? todasFazendas : fazendasLiberadas;
-
-    if (fazendasDisponiveis.length === 0) {
-      fazendaSelect.innerHTML = '<option value="">Nenhuma fazenda</option>';
-      fazendaSelect.disabled = true;
-    } else {
-      fazendaSelect.innerHTML = '';
-      // se fazendaAtual não está na lista, força primeira
-      if (!fazendasDisponiveis.includes(fazendaAtual)) {
-        fazendaAtual = fazendasDisponiveis[0];
-        localStorage.setItem('fazenda_atual', fazendaAtual);
-      }
-      fazendasDisponiveis.forEach(f => {
-        const opt = new Option(f, f, false, f === fazendaAtual);
-        fazendaSelect.add(opt);
-      });
-      fazendaSelect.disabled = false;
-    }
+    todasFazendas.forEach(f => fazendaSelect.add(new Option(f, f, false, f === fazendaAtual)));
 
     fazendaSelect.addEventListener('change', () => {
       fazendaAtual = fazendaSelect.value;
       localStorage.setItem('fazenda_atual', fazendaAtual);
-      updateOperadores();
+      initDados();
+      popularFrotasEFiltros();
       render();
     });
 
-    // ================== FROTAS / TRATORISTAS ==================
-    const getFrotas = () => JSON.parse(localStorage.getItem('frotas') || '[]');
-    const getTratoristas = (fazenda, frota) => {
-      const data = JSON.parse(localStorage.getItem('tratoristas') || '{}');
-      return data[fazenda]?.[frota] || [];
+    const frotasSantaAna = ["02-722","02-723","02-727","02-728","02-732","02-733","02-741","02-743","02-737","02-740","02-739","02-747","02-746","02-076","02-748","02-749","02-750","02-751","02-752","02-014"];
+    const tratoristasSantaAna = ["ADRIEL AUGUSTO DE CAMARGO","ALAF RODRIGUES DE CAMARGO","ALISSON MARTINS DOS SANTOS","ANDRE FELIPE GOMES BATISTA","ANTONIO BENEDITO RAMOS","AYRTON IZAAC NETO","BRUNO TELES DA ROCHA","CARLOS DE JESUS OLIVEIRA","EDINALDO SILVA LEITE","ELOANA DA SILVA SALES DOS SANTOS","FRANCISCO CLEMERSON OLIVEIRA DE LIMA","GILMAR LIMA DE SOUZA JUNIOR - IRRIGAÇÃO","IVAN CARLOS GOMES","JOSE RAVAEL RODRIGUES DE PAULA","JOSE SEABRA DA SILVA NETO","KAYK AUGUSTO DOS SANTOS PINTO","MARCELINO DA SILVA FILHO","MARCOS HENRIQUE APARECIDO NUNES","MAURO DIAS RODRIGUES","MAXSUEL DARIO DE OLIVEIRA","RAPHAEL DE OLIVEIRA","RICHARD DE OLIVEIRA","RONALDO PEREIRA","ZAQUEU ROCHEL"];
+
+    const initDados = () => {
+      const tratoristas = JSON.parse(localStorage.getItem('tratoristas') || '{}');
+      if (!tratoristas["SANTA ANA"]) {
+        const mapa = {};
+        frotasSantaAna.forEach(f => mapa[f] = tratoristasSantaAna);
+        tratoristas["SANTA ANA"] = mapa;
+        localStorage.setItem('tratoristas', JSON.stringify(tratoristas));
+      }
+      const frotas = JSON.parse(localStorage.getItem('frotas') || '[]');
+      if (!frotas.length) localStorage.setItem('frotas', JSON.stringify(frotasSantaAna));
     };
 
-    // ================== SEMANA ==================
+    const popularFrotasEFiltros = () => {
+      const frotaSelect = $('frota');
+      frotaSelect.innerHTML = '<option value="">Selecione frota</option>';
+      const lista = fazendaAtual === "SANTA ANA" ? frotasSantaAna : JSON.parse(localStorage.getItem('frotas') || '[]');
+      lista.forEach(f => frotaSelect.add(new Option(f, f)));
+      choicesOper.clearChoices();
+      if (frotaSelect.value) updateOperadores();
+    };
+
+    const updateOperadores = () => {
+      const frota = $('frota').value;
+      if (!frota) { choicesOper.clearChoices(); return; }
+      const data = JSON.parse(localStorage.getItem('tratoristas') || '{}');
+      const ops = data[fazendaAtual]?.[frota] || [];
+      choicesOper.setChoices(ops.map(o => ({ value: o, label: o })), 'value', 'label', true);
+    };
+
     const getSemana = () => {
       const d = new Date();
       const wd = d.getDay();
@@ -320,7 +335,6 @@
     $('semana-label').textContent = SEM_LABEL;
     $('badge-semana').textContent = SEM_LABEL;
 
-    // ================== STORAGE POR FAZENDA/SEMANA ==================
     const lsKey = () => `rend_${fazendaAtual}_${SEM_KEY}`;
     const db = {
       get: () => JSON.parse(localStorage.getItem(lsKey()) || "{}"),
@@ -328,51 +342,32 @@
       clear: () => localStorage.removeItem(lsKey())
     };
 
-    // seed de exemplo opcional para SLP
-    if (!Object.keys(db.get()).length && fazendaAtual === "SLP") {
-      db.set({
-        "JOÃO": { "727": { "Dia": { "BB": { "seg": { p: 120, r: 118.5 }, "ter": { p: 120, r: 122 }, "qua": { p: 120, r: 115 } } } } },
-        "PEDRO": { "727": { "Dia": { "BB": { "seg": { p: 110, r: 108 }, "ter": { p: 110, r: 112 } } } } },
-        "MARIA": { "728": { "Dia": { "BB": { "seg": { p: 130, r: 132 } } } } }
-      });
-    }
-
-    // ================== UI BÁSICA ==================
-    const fill = (id, arr) => {
-      const s = $(id);
-      s.innerHTML = "";
-      arr.forEach(v => s.add(new Option(v, v)));
-    };
-    fill("frota", getFrotas());
-
-    const choicesOper = new Choices("#operador", { removeItemButton: true, shouldSort: false, placeholderValue: "Selecione..." });
+    // Choices com removeItemButton
+    const choicesOper = new Choices("#operador", {
+      removeItemButton: true,
+      shouldSort: false,
+      placeholderValue: "Selecione operadores...",
+      searchEnabled: true,
+      searchPlaceholderValue: "Buscar nome...",
+      maxItemCount: 50
+    });
     const choicesDias = new Choices("#dias", { removeItemButton: true, shouldSort: false, placeholderValue: "Dias..." });
 
-    const updateOperadores = () => {
-      const frota = $('frota').value;
-      const ops = getTratoristas(fazendaAtual, frota);
-      choicesOper.clearChoices();
-      choicesOper.setChoices(ops.map(o => ({ value: o, label: o })), 'value', 'label', true);
-    };
     $('frota').addEventListener('change', updateOperadores);
 
-    // ================== RANKING ==================
     const calcularRanking = () => {
       const data = db.get();
       const frota = $('frota').value;
       const turno = $('turno').value;
 
       let totalBB = {}, totalHa = {};
-
       Object.keys(data).forEach(op => {
         const frotaData = data[op][frota]?.[turno];
         if (!frotaData) return;
-
         Object.keys(frotaData).forEach(unidade => {
           const dias = frotaData[unidade];
           let somaR = 0;
           Object.values(dias).forEach(d => somaR += Number(d.r) || 0);
-
           if (unidade === "BB") totalBB[op] = (totalBB[op] || 0) + somaR;
           if (unidade === "Há") totalHa[op] = (totalHa[op] || 0) + somaR;
         });
@@ -391,19 +386,10 @@
         }
       };
 
-      format(totalBB, 
-        ['rank-bb-name-1', 'rank-bb-name-2', 'rank-bb-name-3'],
-        ['rank-bb-val-1', 'rank-bb-val-2', 'rank-bb-val-3'],
-        'BB'
-      );
-      format(totalHa, 
-        ['rank-ha-name-1', 'rank-ha-name-2', 'rank-ha-name-3'],
-        ['rank-ha-val-1', 'rank-ha-val-2', 'rank-ha-val-3'],
-        'Há'
-      );
+      format(totalBB, ['rank-bb-name-1','rank-bb-name-2','rank-bb-name-3'], ['rank-bb-val-1','rank-bb-val-2','rank-bb-val-3'], 'BB');
+      format(totalHa, ['rank-ha-name-1','rank-ha-name-2','rank-ha-name-3'], ['rank-ha-val-1','rank-ha-val-2','rank-ha-val-3'], 'Há');
     };
 
-    // ================== RENDER TABELA ==================
     const render = () => {
       const data = db.get();
       const frota = $('frota').value;
@@ -444,7 +430,6 @@
       calcularRanking();
     };
 
-    // ================== SALVAR LANÇAMENTO ==================
     const salvar = () => {
       const ops = choicesOper.getValue(true);
       const dias = choicesDias.getValue(true);
@@ -487,31 +472,16 @@
       toast("Lançamento salvo com sucesso!");
     };
 
-    // ================== LOGOUT / LIMPAR ==================
-    $('btn-logout').onclick = () => {
-      localStorage.removeItem('usuario_logado');
-      localStorage.removeItem('fazendas_liberadas');
-      localStorage.removeItem('is_admin');
-      localStorage.removeItem('fazenda_atual');
-      window.location.href = 'login.html';
-    };
+    $('btn-logout').onclick = () => { localStorage.clear(); location.reload(); };
+    $('btn-limpar').onclick = () => { if (confirm("Apagar tudo?")) { db.clear(); render(); toast("Dados apagados."); } };
+    $('btn-salvar').onclick = salvar;
 
-    $('btn-limpar').onclick = () => {
-      if (confirm("Apagar TODOS os dados da semana?")) {
-        db.clear();
-        render();
-        toast("Dados apagados.");
-      }
-    };
-
-    // ================== INIT ==================
     document.addEventListener('DOMContentLoaded', () => {
       lucide.createIcons();
-      updateOperadores();
+      initDados();
+      popularFrotasEFiltros();
       render();
     });
-
-    $('btn-salvar').onclick = salvar;
   </script>
 </body>
 </html>
