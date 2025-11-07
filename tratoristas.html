@@ -6,19 +6,56 @@
   <title>Cadastro de Tratoristas</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    :root { --primary: #1e40af; --success: #16a34a; --bg: #f8fafc; --card: #ffffff; --border: #e2e8f0; --text: #1e293b; --muted: #64748b; --radius: 0.75rem; --shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    :root {
+      --primary: #1e40af;
+      --success: #16a34a;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --border: #e2e8f0;
+      --text: #1e293b;
+      --muted: #64748b;
+      --radius: 0.75rem;
+      --shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; }
     .container { max-width: 800px; margin: 2rem auto; padding: 1.5rem; }
     header { background: var(--primary); color: white; padding: 1.5rem; border-radius: var(--radius); text-align: center; margin-bottom: 2rem; }
     .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; box-shadow: var(--shadow); margin-bottom: 1.5rem; }
-    select, input, button { padding: 0.75rem; border: 1.5px solid var(--border); border-radius: var(--radius); font: inherit; width: 100%; margin-bottom: 1rem; }
+    select, input, button {
+      padding: 0.75rem;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      font: inherit;
+      width: 100%;
+      margin-bottom: 1rem;
+    }
     select:focus, input:focus { outline: none; border-color: var(--primary); }
     button { background: var(--success); color: white; font-weight: 700; cursor: pointer; }
     button:hover { background: #15803d; }
     .list { list-style: none; }
-    .list li { padding: 0.75rem; background: #f8fafc; border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 0.5rem; display: flex; justify-content: space-between; }
-    .btn-del { background: #dc2626; color: white; border: none; padding: 0.5rem 1rem; border-radius: 999px; font-size: 0.8rem; cursor: pointer; }
+    .list li {
+      padding: 0.75rem;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 0.5rem;
+      display: flex;
+      justify-content: space-between;
+      gap: 0.75rem;
+      align-items: center;
+      font-size: 0.9rem;
+    }
+    .btn-del {
+      background: #dc2626;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      white-space: nowrap;
+    }
   </style>
 </head>
 <body>
@@ -36,9 +73,11 @@
   </div>
 
   <script>
+    // bloqueia acesso sem admin
     if (localStorage.getItem('is_admin') !== 'true') window.location.href = 'login.html';
 
     const $ = id => document.getElementById(id);
+
     const db = {
       get: () => JSON.parse(localStorage.getItem('tratoristas') || '{}'),
       set: (obj) => localStorage.setItem('tratoristas', JSON.stringify(obj))
@@ -63,24 +102,105 @@
         Object.keys(data[fazenda]).sort().forEach(frota => {
           data[fazenda][frota].sort().forEach(nome => {
             const li = document.createElement('li');
-            li.innerHTML = `${nome} → ${frota} (${fazenda}) <button class="btn-del" data-fazenda="${fazenda}" data-frota="${frota}" data-nome="${nome}">Excluir</button>`;
+            li.innerHTML = `
+              <span>${nome} → ${frota} (${fazenda})</span>
+              <button class="btn-del"
+                data-fazenda="${fazenda}"
+                data-frota="${frota}"
+                data-nome="${nome}"
+              >Excluir</button>
+            `;
             lista.appendChild(li);
           });
         });
       });
     };
 
+    // constantes para Santa Ana
+    const SANTA_ANA = 'SANTA ANA';
+    const FROTA_SANTA_ANA = 'SANTA ANA';
+
+    // lista de tratoristas da Santa Ana
+    const santaAnaTratoristas = [
+      'ADRIEL AUGUSTO DE CAMARGO',
+      'ALAF RODRIGUES DE CAMARGO',
+      'ALISSON MARTINS DOS SANTOS',
+      'ANDRE FELIPE GOMES BATISTA',
+      'ANTONIO BENEDITO RAMOS',
+      'AYRTON IZAAC NETO',
+      'BRUNO TELES DA ROCHA',
+      'CARLOS DE JESUS OLIVEIRA',
+      'EDINALDO SILVA LEITE',
+      'ELOANA DA SILVA SALES DOS SANTOS',
+      'FRANCISCO CLEMERSON OLIVEIRA DE LIMA',
+      'GILMAR LIMA DE SOUZA JUNIOR - IRRIGAÇÃO',
+      'IVAN CARLOS GOMES',
+      'JOSE RAVAEL RODRIGUES DE PAULA',
+      'JOSE SEABRA DA SILVA NETO',
+      'KAYK AUGUSTO DOS SANTOS PINTO',
+      'MARCELINO DA SILVA FILHO',
+      'MARCOS HENRIQUE APARECIDO NUNES',
+      'MAURO DIAS RODRIGUES',
+      'MAXSUEL DARIO DE OLIVEIRA',
+      'RAPHAEL DE OLIVEIRA',
+      'RICHARD DE OLIVEIRA',
+      'RONALDO PEREIRA',
+      'ZAQUEU ROCHEL'
+    ];
+
+    // joga os tratoristas no localStorage na fazenda SANTA ANA
+    const seedSantaAna = () => {
+      const data = db.get();
+
+      // garante estrutura
+      data[SANTA_ANA] ??= {};
+      data[SANTA_ANA][FROTA_SANTA_ANA] ??= [];
+
+      santaAnaTratoristas.forEach(nome => {
+        if (!data[SANTA_ANA][FROTA_SANTA_ANA].includes(nome)) {
+          data[SANTA_ANA][FROTA_SANTA_ANA].push(nome);
+        }
+      });
+
+      db.set(data);
+
+      // garante que SANTA ANA exista na lista de fazendas
+      const fazendas = JSON.parse(localStorage.getItem('fazendas') || '[]');
+      if (!fazendas.includes(SANTA_ANA)) {
+        fazendas.push(SANTA_ANA);
+        localStorage.setItem('fazendas', JSON.stringify(fazendas));
+      }
+
+      // garante que a frota usada exista na lista de frotas
+      const frotas = JSON.parse(localStorage.getItem('frotas') || '[]');
+      if (!frotas.includes(FROTA_SANTA_ANA)) {
+        frotas.push(FROTA_SANTA_ANA);
+        localStorage.setItem('frotas', JSON.stringify(frotas));
+      }
+    };
+
     $('btn-add').onclick = () => {
       const fazenda = $('fazenda').value;
       const frota = $('frota').value;
       const nome = $('nome').value.trim().toUpperCase();
-      if (!fazenda || !frota || !nome) return alert('Preencha todos os campos.');
+
+      if (!fazenda || !frota || !nome) {
+        alert('Preencha todos os campos.');
+        return;
+      }
+
       const data = db.get();
       data[fazenda] ??= {};
       data[fazenda][frota] ??= [];
-      if (data[fazenda][frota].includes(nome)) return alert('Tratorista já cadastrado.');
+
+      if (data[fazenda][frota].includes(nome)) {
+        alert('Tratorista já cadastrado.');
+        return;
+      }
+
       data[fazenda][frota].push(nome);
       db.set(data);
+
       $('nome').value = '';
       render();
     };
@@ -99,6 +219,8 @@
       }
     };
 
+    // primeiro semeia Santa Ana, depois atualiza selects e lista
+    seedSantaAna();
     updateSelects();
     render();
   </script>
