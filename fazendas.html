@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cadastro de Fazendas</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root { --primary: #1e40af; --success: #16a34a; --bg: #f8fafc; --card: #ffffff; --border: #e2e8f0; --text: #1e293b; --muted: #64748b; --radius: 0.75rem; --shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; }
+    .container { max-width: 800px; margin: 2rem auto; padding: 1.5rem; }
+    header { background: var(--primary); color: white; padding: 1.5rem; border-radius: var(--radius); text-align: center; margin-bottom: 2rem; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; box-shadow: var(--shadow); margin-bottom: 1.5rem; }
+    input, button { padding: 0.75rem; border: 1.5px solid var(--border); border-radius: var(--radius); font: inherit; width: 100%; margin-bottom: 1rem; }
+    input:focus { outline: none; border-color: var(--primary); }
+    button { background: var(--success); color: white; font-weight: 700; cursor: pointer; }
+    button:hover { background: #15803d; }
+    .list { list-style: none; }
+    .list li { padding: 0.75rem; background: #f8fafc; border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 0.5rem; display: flex; justify-content: space-between; }
+    .btn-del { background: #dc2626; color: white; border: none; padding: 0.5rem 1rem; border-radius: 999px; font-size: 0.8rem; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header><h1>Cadastro de Fazendas</h1></header>
+    <div class="card">
+      <input type="text" id="nome" placeholder="Nome da Fazenda" />
+      <button id="btn-add">Adicionar Fazenda</button>
+    </div>
+    <div class="card">
+      <ul id="lista" class="list"></ul>
+    </div>
+  </div>
+
+  <script>
+    if (localStorage.getItem('is_admin') !== 'true') window.location.href = 'login.html';
+
+    const $ = id => document.getElementById(id);
+    const db = {
+      get: () => JSON.parse(localStorage.getItem('fazendas') || '[]'),
+      set: (arr) => localStorage.setItem('fazendas', JSON.stringify(arr))
+    };
+
+    const render = () => {
+      const lista = $('lista');
+      lista.innerHTML = '';
+      db.get().forEach(f => {
+        const li = document.createElement('li');
+        li.innerHTML = `${f} <button class="btn-del" data-nome="${f}">Excluir</button>`;
+        lista.appendChild(li);
+      });
+    };
+
+    $('btn-add').onclick = () => {
+      const nome = $('nome').value.trim().toUpperCase();
+      if (!nome) return alert('Digite o nome da fazenda.');
+      const fazendas = db.get();
+      if (fazendas.includes(nome)) return alert('Fazenda já existe.');
+      fazendas.push(nome);
+      db.set(fazendas);
+      $('nome').value = '';
+      render();
+    };
+
+    $('lista').onclick = e => {
+      if (e.target.classList.contains('btn-del')) {
+        const nome = e.target.dataset.nome;
+        if (confirm(`Excluir ${nome}?`)) {
+          db.set(db.get().filter(f => f !== nome));
+          render();
+        }
+      }
+    };
+
+    render();
+  </script>
+</body>
+</html>

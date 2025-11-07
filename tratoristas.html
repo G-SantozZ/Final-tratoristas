@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cadastro de Tratoristas</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root { --primary: #1e40af; --success: #16a34a; --bg: #f8fafc; --card: #ffffff; --border: #e2e8f0; --text: #1e293b; --muted: #64748b; --radius: 0.75rem; --shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; }
+    .container { max-width: 800px; margin: 2rem auto; padding: 1.5rem; }
+    header { background: var(--primary); color: white; padding: 1.5rem; border-radius: var(--radius); text-align: center; margin-bottom: 2rem; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; box-shadow: var(--shadow); margin-bottom: 1.5rem; }
+    select, input, button { padding: 0.75rem; border: 1.5px solid var(--border); border-radius: var(--radius); font: inherit; width: 100%; margin-bottom: 1rem; }
+    select:focus, input:focus { outline: none; border-color: var(--primary); }
+    button { background: var(--success); color: white; font-weight: 700; cursor: pointer; }
+    button:hover { background: #15803d; }
+    .list { list-style: none; }
+    .list li { padding: 0.75rem; background: #f8fafc; border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 0.5rem; display: flex; justify-content: space-between; }
+    .btn-del { background: #dc2626; color: white; border: none; padding: 0.5rem 1rem; border-radius: 999px; font-size: 0.8rem; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header><h1>Cadastro de Tratoristas</h1></header>
+    <div class="card">
+      <select id="fazenda"></select>
+      <select id="frota"></select>
+      <input type="text" id="nome" placeholder="Nome do Tratorista" />
+      <button id="btn-add">Adicionar Tratorista</button>
+    </div>
+    <div class="card">
+      <ul id="lista" class="list"></ul>
+    </div>
+  </div>
+
+  <script>
+    if (localStorage.getItem('is_admin') !== 'true') window.location.href = 'login.html';
+
+    const $ = id => document.getElementById(id);
+    const db = {
+      get: () => JSON.parse(localStorage.getItem('tratoristas') || '{}'),
+      set: (obj) => localStorage.setItem('tratoristas', JSON.stringify(obj))
+    };
+
+    const fill = (id, arr) => {
+      const s = $(id);
+      s.innerHTML = '<option value="">Selecione...</option>';
+      arr.forEach(v => s.add(new Option(v, v)));
+    };
+
+    const updateSelects = () => {
+      fill('fazenda', JSON.parse(localStorage.getItem('fazendas') || '[]'));
+      fill('frota', JSON.parse(localStorage.getItem('frotas') || '[]'));
+    };
+
+    const render = () => {
+      const lista = $('lista');
+      lista.innerHTML = '';
+      const data = db.get();
+      Object.keys(data).sort().forEach(fazenda => {
+        Object.keys(data[fazenda]).sort().forEach(frota => {
+          data[fazenda][frota].sort().forEach(nome => {
+            const li = document.createElement('li');
+            li.innerHTML = `${nome} → ${frota} (${fazenda}) <button class="btn-del" data-fazenda="${fazenda}" data-frota="${frota}" data-nome="${nome}">Excluir</button>`;
+            lista.appendChild(li);
+          });
+        });
+      });
+    };
+
+    $('btn-add').onclick = () => {
+      const fazenda = $('fazenda').value;
+      const frota = $('frota').value;
+      const nome = $('nome').value.trim().toUpperCase();
+      if (!fazenda || !frota || !nome) return alert('Preencha todos os campos.');
+      const data = db.get();
+      data[fazenda] ??= {};
+      data[fazenda][frota] ??= [];
+      if (data[fazenda][frota].includes(nome)) return alert('Tratorista já cadastrado.');
+      data[fazenda][frota].push(nome);
+      db.set(data);
+      $('nome').value = '';
+      render();
+    };
+
+    $('lista').onclick = e => {
+      if (e.target.classList.contains('btn-del')) {
+        const { fazenda, frota, nome } = e.target.dataset;
+        if (confirm(`Excluir ${nome}?`)) {
+          const data = db.get();
+          data[fazenda][frota] = data[fazenda][frota].filter(n => n !== nome);
+          if (data[fazenda][frota].length === 0) delete data[fazenda][frota];
+          if (Object.keys(data[fazenda]).length === 0) delete data[fazenda];
+          db.set(data);
+          render();
+        }
+      }
+    };
+
+    updateSelects();
+    render();
+  </script>
+</body>
+</html>
